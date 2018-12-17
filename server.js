@@ -12,8 +12,19 @@ let helmet            = require('helmet');
 
 var app = express();
 
-helmet.contentSecurityPolicy();
-
+app.use(helmet({
+  frameguard: {
+     action: 'deny'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      scriptSrc: ["'self'"]
+    }
+   }
+ }));
+  
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
