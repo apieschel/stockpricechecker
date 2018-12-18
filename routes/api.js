@@ -123,14 +123,21 @@ module.exports = function (app) {
                 console.log(dataset);
 
                 if(name) { 
+                  let firstStockLikes = 0; 
+                  let secondStockLikes = 0; 
+                  
+                  Stock.findOne({ticker: name}, function(err, data) {
+                    
+                  });
+                  
                   res.json({
                     stockOne: {
-                      stock: dataset[0]["Global Quote"]["01. symbol"], 
+                      ticker: dataset[0]["Global Quote"]["01. symbol"], 
                       price: dataset[0]["Global Quote"]["05. price"],
                       rel_likes: 0
                     }, 
                     stockTwo: {
-                      stock: dataset[1]["Global Quote"]["01. symbol"],
+                      ticker: dataset[1]["Global Quote"]["01. symbol"],
                       price: dataset[1]["Global Quote"]["05. price"],
                       rel_likes: 0
                     }
