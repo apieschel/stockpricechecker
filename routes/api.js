@@ -32,7 +32,7 @@ module.exports = function (app) {
             let dataset = JSON.parse(stockData);
             let name = dataset["Global Quote"]["01. symbol"];
             let price = dataset["Global Quote"]["05. price"];
-            console.log(dataset);
+            //console.log(dataset);
 
             if(name) { 
               if(req.query.like) {
@@ -104,7 +104,7 @@ module.exports = function (app) {
         resp.on('end', () => {
           dataset.push(JSON.parse(stockData));
           let name = dataset[0]["Global Quote"]["01. symbol"];
-          console.log(dataset);
+          //console.log(dataset);
 
           if(name) { 
             
@@ -120,26 +120,43 @@ module.exports = function (app) {
               resp.on('end', () => {
                 dataset.push(JSON.parse(stockData));
                 let name = dataset[1]["Global Quote"]["01. symbol"];
-                console.log(dataset);
+                //console.log(dataset);
 
                 if(name) { 
                   let firstStockLikes = 0; 
                   let secondStockLikes = 0; 
                   
-                  Stock.findOne({ticker: name}, function(err, data) {
-                    
+                  Stock.findOne({ticker: dataset[0]["Global Quote"]["01. symbol"]}, function(err, data) {
+                    if(err) throw err;
+                    if(data !== null) {
+                      console.log(data.likes);
+                      firstStockLikes = data.likes;
+                      console.log(firstStockLikes);
+                    }
                   });
+                  
+                  Stock.findOne({ticker: dataset[1]["Global Quote"]["01. symbol"]}, function(err, data) {
+                    if(err) throw err;
+                    if(data !== null) {
+                      console.log(data.likes);
+                      secondStockLikes = data.likes;
+                      console.log(secondStockLikes);
+                    }
+                  });
+                  
+                  console.log(firstStockLikes);
+                  console.log(secondStockLikes);
                   
                   res.json({
                     stockOne: {
                       ticker: dataset[0]["Global Quote"]["01. symbol"], 
                       price: dataset[0]["Global Quote"]["05. price"],
-                      rel_likes: 0
+                      rel_likes: firstStockLikes - secondStockLikes
                     }, 
                     stockTwo: {
                       ticker: dataset[1]["Global Quote"]["01. symbol"],
                       price: dataset[1]["Global Quote"]["05. price"],
-                      rel_likes: 0
+                      rel_likes: secondStockLikes - firstStockLikes
                     }
                   });
                 } else {
