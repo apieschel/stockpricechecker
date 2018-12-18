@@ -46,11 +46,16 @@ module.exports = function (app) {
                   ip = req.connection.remoteAddress;
                 }
                 
-                data.likes = data.likes + 1;
-                data.save();
+                let ipArr = data.ips;
                 
+                if(ipArr.includes(ip)) {
+                  res.json("You have already liked this stock!");
+                } else {
+                  data.likes = data.likes + 1;
+                  data.save();
+                  res.json("You added this stock to your likes!");
+                }       
                 
-                res.json(data.ips);						
               } else {			
                   if(err) throw err;
                 
