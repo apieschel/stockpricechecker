@@ -30,7 +30,11 @@ module.exports = function (app) {
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          res.json(JSON.parse(data));
+          let dataset = JSON.parse(data);
+          let name = dataset["Global Quote"]["01. symbol"];
+          let price = dataset["Global Quote"]["05. price"];
+          console.log(dataset);
+          res.json(name + ": " + price);
         });
 
       }).on("error", (err) => {
