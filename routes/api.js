@@ -29,56 +29,59 @@ module.exports = function (app) {
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          let dataset = JSON.parse(stockData);
-          let name = dataset["Global Quote"]["01. symbol"];
-          let price = dataset["Global Quote"]["05. price"];
-          console.log(dataset);
-          
-          if(req.query.like) {
-            Stock.findOne({ticker: name}, function(err, data) {
-              if(data !== null) {
-                if(err) throw err;
-                
-                let ip = req.headers['x-forwarded-for'];
-                if(ip) {
-                  ip = req.headers['x-forwarded-for'].split(',').shift();
-                } else {
-                  ip = req.connection.remoteAddress;
-                }
-                
-                let ipArr = data.ips;
-                
-                if(ipArr.includes(ip)) {
-                  res.json("You have already liked this stock!");
-                } else {
-                  data.likes = data.likes + 1;
-                  data.save();
-                  res.json("You added this stock to your likes!");
-                }       
-                
-              } else {			
-                  if(err) throw err;
-                
-                  let ip = req.headers['x-forwarded-for'];
-                  if(ip) {
-                    ip = req.headers['x-forwarded-for'].split(',').shift();
-                  } else {
-                    ip = req.connection.remoteAddress;
-                  }
-                
-                  let newStock = new Stock({ticker: name, price: price, likes: 1, ips: [ip]});
+            let dataset = JSON.parse(stockData);
+            let name = dataset["Global Quote"]["01. symbol"];
+            let price = dataset["Global Quote"]["05. price"];
+            console.log(dataset);
 
-                  newStock.save(function(err, data) {
+            if(name) { 
+              if(req.query.like) {
+                Stock.findOne({ticker: name}, function(err, data) {
+                  if(data !== null) {
                     if(err) throw err;
-                    res.json(data);
-                  });																		
+
+                    let ip = req.headers['x-forwarded-for'];
+                    if(ip) {
+                      ip = req.headers['x-forwarded-for'].split(',').shift();
+                    } else {
+                      ip = req.connection.remoteAddress;
+                    }
+
+                    let ipArr = data.ips;
+
+                    if(ipArr.includes(ip)) {
+                      res.json("You have already liked this stock!");
+                    } else {
+                      data.likes = data.likes + 1;
+                      data.save();
+                      res.json("You added this stock to your likes!");
+                    }       
+
+                  } else {			
+                      if(err) throw err;
+
+                      let ip = req.headers['x-forwarded-for'];
+                      if(ip) {
+                        ip = req.headers['x-forwarded-for'].split(',').shift();
+                      } else {
+                        ip = req.connection.remoteAddress;
+                      }
+
+                      let newStock = new Stock({ticker: name, price: price, likes: 1, ips: [ip]});
+
+                      newStock.save(function(err, data) {
+                        if(err) throw err;
+                        res.json(data);
+                      });																		
+                  }
+                });
+              } else {
+                res.json(name + ": " + price);
               }
-            });
           } else {
-            res.json(name + ": " + price);
+            res.json("Apologies, but we could not find that stock!"); 
           }
         });
-
       }).on("error", (err) => {
         console.log("Error: " + err.message);
         res.json("Error: " + err.message);
