@@ -90,6 +90,32 @@ module.exports = function (app) {
     });
   
     app.get("/api/stock-prices/compare", function(req, res) {
-      res.json(req.query.stock);
+      
+      https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
+        let stockData = '';
+
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+          stockData += chunk;
+        });
+
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+          let dataset = JSON.parse(stockData);
+          let name = dataset["Global Quote"]["01. symbol"];
+          let price = dataset["Global Quote"]["05. price"];
+          console.log(dataset);
+
+          if(name) { 
+            
+          } else {
+            res.json("Apologies, but we could not find that stock!"); 
+          }
+        });
+      }).on("error", (err) => {
+        console.log("Error: " + err.message);
+        res.json("Error: " + err.message);
+      });
+      
     });
 };
