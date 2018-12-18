@@ -1,14 +1,15 @@
 'use strict';
 
-var express     = require('express');
-var bodyParser  = require('body-parser');
-var expect      = require('chai').expect;
-var cors        = require('cors');
+const express     = require('express');
+const bodyParser  = require('body-parser');
+const expect      = require('chai').expect;
+const cors        = require('cors');
 
-var apiRoutes         = require('./routes/api.js');
-var fccTestingRoutes  = require('./routes/fcctesting.js');
-var runner            = require('./test-runner');
-let helmet            = require('helmet');
+const apiRoutes         = require('./routes/api.js');
+const fccTestingRoutes  = require('./routes/fcctesting.js');
+const runner            = require('./test-runner');
+const helmet            = require('helmet');
+const mongoose = require('mongoose');
 
 var app = express();
 
@@ -41,6 +42,14 @@ app.route('/')
 //For FCC testing purposes
 fccTestingRoutes(app);
 
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
+  if(err) {
+        console.log('Database error: ' + err);
+    } else {
+        console.log('Successful database connection');
+    }
+	
+});
 //Routing for API 
 apiRoutes(app);  
     
