@@ -12,8 +12,7 @@ const expect = require('chai').expect;
 const MongoClient = require('mongodb');
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const https = require('https');
-
-const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
+const Stock = require("../models.js").stockModel;
 
 module.exports = function (app) {
 
