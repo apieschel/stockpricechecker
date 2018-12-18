@@ -20,7 +20,7 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(function (req, res){
     
-        https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo', (resp) => {
+        https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=GOOG&apikey=' + process.env.API_KEY, (resp) => {
         let data = '';
 
         // A chunk of data has been recieved.
