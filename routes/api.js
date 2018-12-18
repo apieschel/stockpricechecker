@@ -38,8 +38,11 @@ module.exports = function (app) {
             Stock.findOne({ticker: name}, function(err, data) {
               if(data !== null) {
                 if(err) throw err;
-                Stock.update({ticker: name}, {$inc: {likes: -1}});
-                res.json("That stock has already been added to the database.");						
+                //data.likes.$inc();
+                //data.save();
+                data.likes = data.likes + 1;
+                data.save();
+                res.json(data);						
               } else {			
                   if(err) throw err;
                   let newStock = new Stock({ticker: name, price: price, likes: 1});
