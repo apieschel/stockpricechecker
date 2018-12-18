@@ -35,7 +35,7 @@ module.exports = function (app) {
           console.log(dataset);
           
           if(req.query.like) {
-            Stock.findOne({ticker: name}, function(err, data) {
+            Stock.findOneAndUpdate({ticker: name}, {$inc: {likes: 1}}, {new: true}, function(err, data) {
               if(data !== null) {
                 if(err) throw err;
                 res.json("That stock has already been added to the database.");						
