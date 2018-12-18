@@ -17,7 +17,9 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(function (req, res){
+      app.get('https://finance.google.com/finance/info?q=NASDAQ%3aGOOG', function(req, res) {
+        console.log(res.body);
+      });
       res.json("Hello, Alex");  
     });
-    
 };
