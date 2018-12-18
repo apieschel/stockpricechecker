@@ -88,4 +88,8 @@ module.exports = function (app) {
       });
     
     });
+  
+    app.get("/api/stock-prices/compare", function(req, res) {
+      res.json(req.query.stock);
+    });
 };
