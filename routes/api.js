@@ -20,7 +20,12 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(function (req, res){
         
-        console.log(req.query.stock);
+        if(req.query.like) {
+          console.log("The box is checked");
+        } else {
+          console.log("The box is not checked.");
+        }
+    
         https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
         let stockData = '';
 
