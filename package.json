@@ -15,7 +15,8 @@
     "helmet": "^3.15.0",
     "mocha": "^5.2.0",
     "mongodb": "^3.1.10",
-    "zombie": "^6.1.4"
+    "zombie": "^6.1.4",
+    "xmlhttprequest": "^1.8.0"
   },
   "engines": {
     "node": "4.4.3"
