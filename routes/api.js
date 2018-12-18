@@ -19,18 +19,19 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(function (req, res){
-    
-        https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=GOOG&apikey=' + process.env.API_KEY, (resp) => {
-        let data = '';
+        
+        console.log(req.query.stock);
+        https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
+        let stockData = '';
 
         // A chunk of data has been recieved.
         resp.on('data', (chunk) => {
-          data += chunk;
+          stockData += chunk;
         });
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          let dataset = JSON.parse(data);
+          let dataset = JSON.parse(stockData);
           let name = dataset["Global Quote"]["01. symbol"];
           let price = dataset["Global Quote"]["05. price"];
           console.log(dataset);

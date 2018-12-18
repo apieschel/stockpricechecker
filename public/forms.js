@@ -1,5 +1,5 @@
 $(function() {
-        /*
+        
         $('#testForm').submit(function(e) {
           $.ajax({
             url: '/api/stock-prices',
@@ -10,7 +10,7 @@ $(function() {
             }
           });
           e.preventDefault();
-        });*/
+        });
         $('#testForm2').submit(function(e) {
           $.ajax({
             url: '/api/stock-prices',
