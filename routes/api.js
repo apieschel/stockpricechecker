@@ -125,27 +125,13 @@ module.exports = function (app) {
                 if(name) { 
                   let firstStockLikes = 0; 
                   let secondStockLikes = 0; 
-                  
-                  Stock.findOne({ticker: dataset[0]["Global Quote"]["01. symbol"]}, function(err, data) {
+                                   
+                  Stock.find({likes: {$exists: true}}, function(err, data) {
                     if(err) throw err;
                     if(data !== null) {
-                      console.log(data.likes);
-                      firstStockLikes = data.likes;
-                      console.log(firstStockLikes);
+                      console.log(data);
                     }
                   });
-                  
-                  Stock.findOne({ticker: dataset[1]["Global Quote"]["01. symbol"]}, function(err, data) {
-                    if(err) throw err;
-                    if(data !== null) {
-                      console.log(data.likes);
-                      secondStockLikes = data.likes;
-                      console.log(secondStockLikes);
-                    }
-                  });
-                  
-                  console.log(firstStockLikes);
-                  console.log(secondStockLikes);
                   
                   res.json({
                     stockOne: {
