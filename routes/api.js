@@ -18,12 +18,6 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(function (req, res){
-        
-        if(req.query.like) {
-          console.log("The box is checked");
-        } else {
-          console.log("The box is not checked.");
-        }
     
         https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
         let stockData = '';
@@ -39,7 +33,25 @@ module.exports = function (app) {
           let name = dataset["Global Quote"]["01. symbol"];
           let price = dataset["Global Quote"]["05. price"];
           console.log(dataset);
-          res.json(name + ": " + price);
+          
+          if(req.query.like) {
+            Stock.findOne({ticker: name}, function(err, data) {
+              if(data !== null) {
+                if(err) throw err;
+                res.json("That stock has already been added to the database.");						
+              } else {			
+                  if(err) throw err;
+                  let newStock = new Stock({ticker: name, price: price, likes: 1});
+
+                  newStock.save(function(err, data) {
+                    if(err) throw err;
+                    res.json(data);
+                  });																		
+              }
+            });
+          } else {
+            res.json(name + ": " + price);
+          }
         });
 
       }).on("error", (err) => {
