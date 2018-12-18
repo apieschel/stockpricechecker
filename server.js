@@ -20,7 +20,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       styleSrc: ["'self'"],
-      scriptSrc: ["'self'"]
+      scriptSrc: ["'self'", "https://code.jquery.com/jquery-2.2.1.min.js"]
     }
    }
  }));
