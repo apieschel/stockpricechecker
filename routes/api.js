@@ -38,14 +38,30 @@ module.exports = function (app) {
             Stock.findOne({ticker: name}, function(err, data) {
               if(data !== null) {
                 if(err) throw err;
-                //data.likes.$inc();
-                //data.save();
+                
+                let ip = req.headers['x-forwarded-for'];
+                if(ip) {
+                  ip = req.headers['x-forwarded-for'].split(',').shift();
+                } else {
+                  ip = req.connection.remoteAddress;
+                }
+                
                 data.likes = data.likes + 1;
                 data.save();
-                res.json(data);						
+                
+                
+                res.json(data.ips);						
               } else {			
                   if(err) throw err;
-                  let newStock = new Stock({ticker: name, price: price, likes: 1});
+                
+                  let ip = req.headers['x-forwarded-for'];
+                  if(ip) {
+                    ip = req.headers['x-forwarded-for'].split(',').shift();
+                  } else {
+                    ip = req.connection.remoteAddress;
+                  }
+                
+                  let newStock = new Stock({ticker: name, price: price, likes: 1, ips: [ip]});
 
                   newStock.save(function(err, data) {
                     if(err) throw err;

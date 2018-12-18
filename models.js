@@ -4,7 +4,8 @@ let Schema = mongoose.Schema;
 let stockSchema = new Schema({
 	ticker: String,
 	price: String,
-  likes: Number
+  likes: Number,
+  ips: [String]
 });
 
 let Stock = mongoose.model('Stock', stockSchema);
