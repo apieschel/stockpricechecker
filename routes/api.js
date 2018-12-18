@@ -17,9 +17,20 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(function (req, res){
-      app.get('https://finance.google.com/finance/info?q=NASDAQ%3aGOOG', function(req, res) {
-        console.log(res.body);
-      });
+      const xhr = new XMLHttpRequest();   
+      const callback = function(err, data) {
+      }
+      xhr.open('GET', 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo', true);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        var status = xhr.status;
+        if (status === 200) {
+          callback(null, xhr.response);
+        } else {
+          callback(status, xhr.response);
+        }
+      };
+      xhr.send();
       res.json("Hello, Alex");  
     });
 };
