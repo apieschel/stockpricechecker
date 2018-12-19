@@ -123,28 +123,38 @@ module.exports = function (app) {
                 //console.log(dataset);
 
                 if(name) { 
-                  let firstStockLikes = 0; 
-                  let secondStockLikes = 0; 
                                    
                   Stock.find({likes: {$exists: true}}, function(err, data) {
                     if(err) throw err;
-                    if(data !== null) {
-                      console.log(data);
+                    
+                    if(data !== null) {                     
+                      let firstStockLikes = 0; 
+                      let secondStockLikes = 0; 
+                      for(let i = 0; i < data.length; i++) {
+                        if(dataset[0]["Global Quote"]["01. symbol"] === data[i].ticker) {
+                          firstStockLikes = data[i].likes;
+                        }
+                        if(dataset[1]["Global Quote"]["01. symbol"] === data[i].ticker) {
+                          secondStockLikes = data[i].likes;
+                        }
+                      }
+                      res.json({
+                        stockOne: {
+                          ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                          price: dataset[0]["Global Quote"]["05. price"],
+                          rel_likes: firstStockLikes - secondStockLikes
+                        }, 
+                        stockTwo: {
+                          ticker: dataset[1]["Global Quote"]["01. symbol"],
+                          price: dataset[1]["Global Quote"]["05. price"],
+                          rel_likes: secondStockLikes - firstStockLikes
+                        }
+                      });
+                    } else {
+                    
                     }
                   });
-                  
-                  res.json({
-                    stockOne: {
-                      ticker: dataset[0]["Global Quote"]["01. symbol"], 
-                      price: dataset[0]["Global Quote"]["05. price"],
-                      rel_likes: firstStockLikes - secondStockLikes
-                    }, 
-                    stockTwo: {
-                      ticker: dataset[1]["Global Quote"]["01. symbol"],
-                      price: dataset[1]["Global Quote"]["05. price"],
-                      rel_likes: secondStockLikes - firstStockLikes
-                    }
-                  });
+                
                 } else {
                   res.json("Apologies, but we could not find that stock!"); 
                 }
