@@ -61,20 +61,26 @@ suite('Functional Tests', function() {
       });
       */
       
-      /*
+      
       test('2 stocks', function(done) {
         chai.request(server)
-        .get('/api/stock-prices')
-        .query({stock: 'goog'})
+        .get('/api/stock-prices/compare')
+        .query({stock: ['goog', 'aapl']})
         .end(function(err, res){
-          assert.equal(res.type, 'application/json', 'check if the response is json');
-          assert.equal(typeof res.body.price, 'string', 'check for the price string is there');
+          console.log(res.body);
           assert.equal(res.status, 200, 'response status should be 200');
-          assert.equal(res.body.ticker, 'GOOG', 'check if the stock name is returned'); 
+          assert.equal(res.type, 'application/json', 'check if the response is json');
+          assert.equal(res.body.stockOne.ticker, 'GOOG', 'check if the first stock name is returned'); 
+          assert.equal(res.body.stockTwo.ticker, 'AAPL', 'check if the second stock name is returned'); 
+          assert.equal(typeof res.body.StockOne.price, 'string', 'check for price in first stock');
+          assert.equal(typeof res.body.StockOne.rel_likes, 'number', 'check for number of relative likes in first stock');
+          assert.equal(typeof res.body.StockTwo.price, 'string', 'check for price in second stock');
+          assert.equal(typeof res.body.StockTwo.rel_likes, 'number', 'check for number of relative likes in second stock');
           done();
         });
       });
       
+      /*
       test('2 stocks with like', function(done) {
         chai.request(server)
         .get('/api/stock-prices')
