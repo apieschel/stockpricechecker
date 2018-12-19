@@ -80,7 +80,7 @@ module.exports = function (app) {
                 res.json(name + ": " + price);
               }
           } else {
-            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
+            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per-minute or per-day limit."); 
           }
         });
       }).on("error", (err) => {
@@ -291,7 +291,7 @@ module.exports = function (app) {
                     });
                   }
                 } else {
-                  res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
+                  res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per-minute or per-day limit."); 
                 }
               });
             }).on("error", (err) => {
@@ -300,7 +300,7 @@ module.exports = function (app) {
             });
             
           } else {
-            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
+            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per-minute or per-day limit."); 
           }
         });
       }).on("error", (err) => {
