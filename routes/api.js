@@ -53,6 +53,7 @@ module.exports = function (app) {
                       res.json("You have already liked this stock!");
                     } else {
                       data.likes = data.likes + 1;
+                      data.ips.push(ip);
                       data.save();
                       res.json("You added this stock to your likes!");
                     }       
@@ -163,18 +164,23 @@ module.exports = function (app) {
                               ticker: dataset[1]["Global Quote"]["01. symbol"],
                               price: dataset[1]["Global Quote"]["05. price"],
                               rel_likes: 0
-                            }});
-                        
-                        
+                        }});
+                                             
                       }
                        
                       if(data.length === 2) {
                         for(let i = 0; i < data.length; i++) {
                           if(!data[i].ips.includes(ip)) {
-                            data[i].likes = data.likes + 1;                         
+                            data[i].likes = data.likes + 1;                    
+                            data[i].ips.push(ip);
                           }                        
                         }
-                        data.save()
+                        data.save();
+                        
+                        
+                        let firstStockLikes = 0; 
+                        let secondStockLikes = 0;
+                        
                       }
                      
                     });  
