@@ -125,77 +125,108 @@ module.exports = function (app) {
                 if(name) { 
                   
                   if(req.query.like) {
+                    
+                    let ip = req.headers['x-forwarded-for'];
+                    if(ip) {
+                      ip = req.headers['x-forwarded-for'].split(',').shift();
+                    } else {
+                      ip = req.connection.remoteAddress;
+                    }
+                    
                     Stock.find({ticker: {$in: [dataset[0]["Global Quote"]["01. symbol"], dataset[1]["Global Quote"]["01. symbol"]]}}, 
                     function(err, data) {
                       if(err) throw err;
                       
                       if(data.length === 0) {
-                        let newStock = new Stock({ticker: [dataset[0]["Global Quote"]["01. symbol"], price: price, likes: 1, ips: [ip]});
+                        let newStock1 = new Stock({
+                          ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                          price: dataset[0]["Global Quote"]["05. price"], 
+                          likes: 1, 
+                          ips: [ip]});
+                        
+                        let newStock2 = new Stock({
+                          ticker: dataset[1]["Global Quote"]["01. symbol"], 
+                          price: dataset[1]["Global Quote"]["05. price"], 
+                          likes: 1, 
+                          ips: [ip]});
+                        
+                        newStock1.save(function(err, data) { if(err) throw err;});
+                        newStock2.save(function(err, data) { if(err) throw err;});
+                        
+                        res.json({
+                            stockOne: {
+                              ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                              price: dataset[0]["Global Quote"]["05. price"],
+                              rel_likes: 0
+                            }, 
+                            stockTwo: {
+                              ticker: dataset[1]["Global Quote"]["01. symbol"],
+                              price: dataset[1]["Global Quote"]["05. price"],
+                              rel_likes: 0
+                            }});
+                        
+                        
                       }
-                      let ip = req.headers['x-forwarded-for'];
-                        if(ip) {
-                          ip = req.headers['x-forwarded-for'].split(',').shift();
-                        } else {
-                          ip = req.connection.remoteAddress;
+                       
+                      if(data.length === 2) {
+                        for(let i = 0; i < data.length; i++) {
+                          if(!data[i].ips.includes(ip)) {
+                            data[i].likes = data.likes + 1;                         
+                          }                        
                         }
-                     
-                      for(let i = 0; i < data.length; i++) {
-                        if(!data[i].ips.includes(ip)) {
-                          data[i].likes = data.likes + 1;                         
-                        }                        
+                        data.save()
                       }
                      
-                      data.save()
                     });  
-                  }
+                  } else {
                                    
-                  Stock.find({likes: {$exists: true}}, function(err, data) {
-                    if(err) throw err;
-                    
-                    if(data !== null) {     
-                      let firstStockLikes = 0; 
-                      let secondStockLikes = 0;
-                      
-                      for(let i = 0; i < data.length; i++) {
-                        if(dataset[0]["Global Quote"]["01. symbol"] === data[i].ticker) {
-                          firstStockLikes = data[i].likes;
+                      Stock.find({likes: {$exists: true}}, function(err, data) {
+                        if(err) throw err;
+
+                        if(data !== null) {     
+                          let firstStockLikes = 0; 
+                          let secondStockLikes = 0;
+
+                          for(let i = 0; i < data.length; i++) {
+                            if(dataset[0]["Global Quote"]["01. symbol"] === data[i].ticker) {
+                              firstStockLikes = data[i].likes;
+                            }
+                            if(dataset[1]["Global Quote"]["01. symbol"] === data[i].ticker) {
+                              secondStockLikes = data[i].likes;
+                            }
+                          }
+
+                          res.json({
+                            stockOne: {
+                              ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                              price: dataset[0]["Global Quote"]["05. price"],
+                              rel_likes: firstStockLikes - secondStockLikes
+                            }, 
+                            stockTwo: {
+                              ticker: dataset[1]["Global Quote"]["01. symbol"],
+                              price: dataset[1]["Global Quote"]["05. price"],
+                              rel_likes: secondStockLikes - firstStockLikes
+                            }
+                          });
+
+                        } else {
+
+                          res.json({
+                            stockOne: {
+                              ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                              price: dataset[0]["Global Quote"]["05. price"],
+                              rel_likes: 0
+                            }, 
+                            stockTwo: {
+                              ticker: dataset[1]["Global Quote"]["01. symbol"],
+                              price: dataset[1]["Global Quote"]["05. price"],
+                              rel_likes: 0
+                            }
+                          });
+
                         }
-                        if(dataset[1]["Global Quote"]["01. symbol"] === data[i].ticker) {
-                          secondStockLikes = data[i].likes;
-                        }
-                      }
-                      
-                      res.json({
-                        stockOne: {
-                          ticker: dataset[0]["Global Quote"]["01. symbol"], 
-                          price: dataset[0]["Global Quote"]["05. price"],
-                          rel_likes: firstStockLikes - secondStockLikes
-                        }, 
-                        stockTwo: {
-                          ticker: dataset[1]["Global Quote"]["01. symbol"],
-                          price: dataset[1]["Global Quote"]["05. price"],
-                          rel_likes: secondStockLikes - firstStockLikes
-                        }
-                      });
-                      
-                    } else {
-                      
-                      res.json({
-                        stockOne: {
-                          ticker: dataset[0]["Global Quote"]["01. symbol"], 
-                          price: dataset[0]["Global Quote"]["05. price"],
-                          rel_likes: 0
-                        }, 
-                        stockTwo: {
-                          ticker: dataset[1]["Global Quote"]["01. symbol"],
-                          price: dataset[1]["Global Quote"]["05. price"],
-                          rel_likes: 0
-                        }
-                      });
-                      
-                    }
-                  });
-                
+                    });
+                  }
                 } else {
                   res.json("Apologies, but we could not find that stock!"); 
                 }
