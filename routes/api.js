@@ -105,7 +105,8 @@ module.exports = function (app) {
         resp.on('end', () => {
           dataset.push(JSON.parse(stockData));
           let name = dataset[0]["Global Quote"]["01. symbol"];
-          //console.log(dataset);
+          console.log(dataset);
+          console.log(dataset[0][]);
 
           if(name) { 
             
