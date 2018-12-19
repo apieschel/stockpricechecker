@@ -127,9 +127,10 @@ module.exports = function (app) {
                   Stock.find({likes: {$exists: true}}, function(err, data) {
                     if(err) throw err;
                     
-                    if(data !== null) {                     
+                    if(data !== null) {     
                       let firstStockLikes = 0; 
-                      let secondStockLikes = 0; 
+                      let secondStockLikes = 0;
+                      
                       for(let i = 0; i < data.length; i++) {
                         if(dataset[0]["Global Quote"]["01. symbol"] === data[i].ticker) {
                           firstStockLikes = data[i].likes;
@@ -138,6 +139,7 @@ module.exports = function (app) {
                           secondStockLikes = data[i].likes;
                         }
                       }
+                      
                       res.json({
                         stockOne: {
                           ticker: dataset[0]["Global Quote"]["01. symbol"], 
@@ -150,8 +152,22 @@ module.exports = function (app) {
                           rel_likes: secondStockLikes - firstStockLikes
                         }
                       });
+                      
                     } else {
-                    
+                      
+                      res.json({
+                        stockOne: {
+                          ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                          price: dataset[0]["Global Quote"]["05. price"],
+                          rel_likes: 0
+                        }, 
+                        stockTwo: {
+                          ticker: dataset[1]["Global Quote"]["01. symbol"],
+                          price: dataset[1]["Global Quote"]["05. price"],
+                          rel_likes: 0
+                        }
+                      });
+                      
                     }
                   });
                 
