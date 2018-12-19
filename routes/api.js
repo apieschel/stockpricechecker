@@ -31,7 +31,8 @@ module.exports = function (app) {
         resp.on('end', () => {
             let dataset = JSON.parse(stockData);
 
-            if(Object.keys(dataset['Global Quote']).length !== 0) { 
+            if(dataset['Global Quote'] != null &&
+               Object.keys(dataset['Global Quote']).length !== 0) { 
               let name = dataset["Global Quote"]["01. symbol"];
               let price = dataset["Global Quote"]["05. price"];
               if(req.query.like) {
@@ -79,7 +80,7 @@ module.exports = function (app) {
                 res.json(name + ": " + price);
               }
           } else {
-            res.json("Apologies, but we could not find that stock!"); 
+            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
           }
         });
       }).on("error", (err) => {
@@ -105,7 +106,8 @@ module.exports = function (app) {
           dataset.push(JSON.parse(stockData));
           console.log(dataset);
 
-          if(Object.keys(dataset[0]['Global Quote']).length !== 0) {            
+          if(dataset[0]['Global Quote'] != null &&
+             Object.keys(dataset[0]['Global Quote']).length !== 0) {            
             
             let name = dataset[0]["Global Quote"]["01. symbol"];
             https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock[1] + '&apikey=' + process.env.API_KEY, (resp) => {
@@ -121,7 +123,8 @@ module.exports = function (app) {
                 dataset.push(JSON.parse(stockData));
                 console.log(dataset);
                 
-                if(Object.keys(dataset[1]['Global Quote']).length !== 0) { 
+                if(dataset[1]['Global Quote'] != null &&
+                   Object.keys(dataset[1]['Global Quote']).length !== 0) { 
                   let name = dataset[1]["Global Quote"]["01. symbol"];
                   if(req.query.like) {
                     
@@ -288,7 +291,7 @@ module.exports = function (app) {
                     });
                   }
                 } else {
-                  res.json("Apologies, but we could not find that stock!"); 
+                  res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
                 }
               });
             }).on("error", (err) => {
@@ -297,7 +300,7 @@ module.exports = function (app) {
             });
             
           } else {
-            res.json("Apologies, but we could not find that stock!"); 
+            res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per minute limit."); 
           }
         });
       }).on("error", (err) => {
