@@ -123,6 +123,22 @@ module.exports = function (app) {
                 //console.log(dataset);
 
                 if(name) { 
+                  
+                  if(req.query.like) {
+                    Stock.find({ticker: {$in: [dataset[0]["Global Quote"]["01. symbol"], dataset[1]["Global Quote"]["01. symbol"]]}}, 
+                    function(err, data) {
+                      if(err) throw err;
+                      
+                      if(data.length === 2) {
+                      
+                      }
+                      
+                      if(data.length === 1) {
+                        
+                      }
+                      
+                    });  
+                  }
                                    
                   Stock.find({likes: {$exists: true}}, function(err, data) {
                     if(err) throw err;
