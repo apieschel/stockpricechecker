@@ -143,13 +143,15 @@ module.exports = function (app) {
                           ticker: dataset[0]["Global Quote"]["01. symbol"], 
                           price: dataset[0]["Global Quote"]["05. price"], 
                           likes: 1, 
-                          ips: [ip]});
+                          ips: [ip]
+                        });
                         
                         let newStock2 = new Stock({
                           ticker: dataset[1]["Global Quote"]["01. symbol"], 
                           price: dataset[1]["Global Quote"]["05. price"], 
                           likes: 1, 
-                          ips: [ip]});
+                          ips: [ip]
+                        });
                         
                         newStock1.save(function(err, data) { if(err) throw err;});
                         newStock2.save(function(err, data) { if(err) throw err;});
@@ -167,6 +169,29 @@ module.exports = function (app) {
                         }});
                                              
                       }
+                      
+                      if(data.length === 1) {
+                        
+                        if(data[0].ticker === dataset[0]["Global Quote"]["01. symbol"]) {
+                          let newStock = new Stock({
+                            ticker: dataset[1]["Global Quote"]["01. symbol"], 
+                            price: dataset[1]["Global Quote"]["05. price"], 
+                            likes: 1, 
+                            ips: [ip]
+                          });
+                          newStock.save();
+                        } else {
+                          let newStock = new Stock({
+                            ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                            price: dataset[0]["Global Quote"]["05. price"], 
+                            likes: 1, 
+                            ips: [ip]
+                          }); 
+                          newStock.save();
+                        }
+                        
+                        
+                      }
                        
                       if(data.length === 2) {
                         for(let i = 0; i < data.length; i++) {
@@ -175,12 +200,24 @@ module.exports = function (app) {
                             data[i].ips.push(ip);
                           }                        
                         }
-                        data.save();
+                        data[0].save();
+                        data[1].save();                       
                         
+                        let firstStockLikes = data[0].likes; 
+                        let secondStockLikes = data[1].likes;
                         
-                        let firstStockLikes = 0; 
-                        let secondStockLikes = 0;
-                        
+                        res.json({
+                          stockOne: {
+                            ticker: dataset[0]["Global Quote"]["01. symbol"], 
+                            price: dataset[0]["Global Quote"]["05. price"],
+                            rel_likes: firstStockLikes - secondStockLikes
+                          }, 
+                          stockTwo: {
+                            ticker: dataset[1]["Global Quote"]["01. symbol"],
+                            price: dataset[1]["Global Quote"]["05. price"],
+                            rel_likes: secondStockLikes - firstStockLikes
+                        }
+                        });
                       }
                      
                     });  
