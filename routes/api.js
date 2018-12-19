@@ -30,11 +30,10 @@ module.exports = function (app) {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
             let dataset = JSON.parse(stockData);
-            let name = dataset["Global Quote"]["01. symbol"];
-            let price = dataset["Global Quote"]["05. price"];
-            //console.log(dataset);
 
-            if(name) { 
+            if(Object.keys(dataset['Global Quote']).length !== 0) { 
+              let name = dataset["Global Quote"]["01. symbol"];
+              let price = dataset["Global Quote"]["05. price"];
               if(req.query.like) {
                 Stock.findOne({ticker: name}, function(err, data) {
                   if(data !== null) {
@@ -104,12 +103,11 @@ module.exports = function (app) {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
           dataset.push(JSON.parse(stockData));
-          let name = dataset[0]["Global Quote"]["01. symbol"];
           console.log(dataset);
-          console.log(dataset[0][]);
 
-          if(name) { 
+          if(Object.keys(dataset[0]['Global Quote']).length !== 0) {            
             
+            let name = dataset[0]["Global Quote"]["01. symbol"];
             https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock[1] + '&apikey=' + process.env.API_KEY, (resp) => {
               let stockData = '';
 
@@ -121,11 +119,10 @@ module.exports = function (app) {
               // The whole response has been received. Print out the result.
               resp.on('end', () => {
                 dataset.push(JSON.parse(stockData));
-                let name = dataset[1]["Global Quote"]["01. symbol"];
-                //console.log(dataset);
-
-                if(name) { 
-                  
+                console.log(dataset);
+                
+                if(Object.keys(dataset[1]['Global Quote']).length !== 0) { 
+                  let name = dataset[1]["Global Quote"]["01. symbol"];
                   if(req.query.like) {
                     
                     let ip = req.headers['x-forwarded-for'];
