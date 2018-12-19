@@ -22,9 +22,13 @@ suite('Functional Tests', function() {
         .get('/api/stock-prices')
         .query({stock: 'goog'})
         .end(function(err, res){
-          
-          
-          
+            
+          console.log(typeof res.body.price);
+          assert.equal(res.type, 'application/json', 'check if the response is json');
+          assert.equal(typeof res.body.price, 'string', 'check for the price string is there');
+          assert.equal(res.status, 200, 'response status should be 200');
+          assert.equal(res.body.ticker, 'GOOG', 'check if the stock name is returned'); 
+         
           done();
         });
       });

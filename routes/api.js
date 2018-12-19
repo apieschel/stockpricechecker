@@ -77,7 +77,7 @@ module.exports = function (app) {
                   }
                 });
               } else {
-                res.json(name + ": " + price);
+                res.json({ticker: name, price: price});
               }
           } else {
             res.json("Apologies, but either we could not find that stock, or we have exceeded our API call per-minute or per-day limit."); 
