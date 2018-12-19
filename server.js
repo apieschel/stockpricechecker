@@ -11,7 +11,7 @@ const runner            = require('./test-runner');
 const helmet            = require('helmet');
 const mongoose = require('mongoose');
 
-var app = express();
+const app = express();
 
 app.use(helmet({
   frameguard: {
@@ -42,7 +42,7 @@ app.route('/')
 //For FCC testing purposes
 fccTestingRoutes(app);
 
-mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
+mongoose.connect(process.env.DB, {useNewUrlParser: true}, (err, db) => {
   if(err) {
         console.log('Database error: ' + err);
     } else {
@@ -74,8 +74,9 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
             }, 3500);
           }
         });
+      
+        module.exports = app; //for testing
+      
       }
 
 });
-
-module.exports = app; //for testing

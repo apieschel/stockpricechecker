@@ -7,7 +7,7 @@
 */
 
 var chai = require('chai');
-var StockHandler = require('../routes/api.js');
+var StockHandler = require('../controllers/stockHandler.js');
 
 var stockPrices = new StockHandler();
 
