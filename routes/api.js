@@ -129,14 +129,23 @@ module.exports = function (app) {
                     function(err, data) {
                       if(err) throw err;
                       
-                      if(data.length === 2) {
-                      
+                      if(data.length === 0) {
+                        let newStock = new Stock({ticker: [dataset[0]["Global Quote"]["01. symbol"], price: price, likes: 1, ips: [ip]});
                       }
-                      
-                      if(data.length === 1) {
-                        
+                      let ip = req.headers['x-forwarded-for'];
+                        if(ip) {
+                          ip = req.headers['x-forwarded-for'].split(',').shift();
+                        } else {
+                          ip = req.connection.remoteAddress;
+                        }
+                     
+                      for(let i = 0; i < data.length; i++) {
+                        if(!data[i].ips.includes(ip)) {
+                          data[i].likes = data.likes + 1;                         
+                        }                        
                       }
-                      
+                     
+                      data.save()
                     });  
                   }
                                    
