@@ -138,6 +138,7 @@ module.exports = function (app) {
                     function(err, data) {
                       if(err) throw err;
                       
+                      // if neither of the stocks are found in the database
                       if(data.length === 0) {
                         let newStock1 = new Stock({
                           ticker: dataset[0]["Global Quote"]["01. symbol"], 
@@ -170,29 +171,47 @@ module.exports = function (app) {
                                              
                       }
                       
+                      // if only one of the stocks is found in the database
                       if(data.length === 1) {
-                        
+                        let newStock
                         if(data[0].ticker === dataset[0]["Global Quote"]["01. symbol"]) {
-                          let newStock = new Stock({
+                          newStock = new Stock({
                             ticker: dataset[1]["Global Quote"]["01. symbol"], 
                             price: dataset[1]["Global Quote"]["05. price"], 
                             likes: 1, 
                             ips: [ip]
                           });
-                          newStock.save();
                         } else {
-                          let newStock = new Stock({
+                          newStock = new Stock({
                             ticker: dataset[0]["Global Quote"]["01. symbol"], 
                             price: dataset[0]["Global Quote"]["05. price"], 
                             likes: 1, 
                             ips: [ip]
                           }); 
-                          newStock.save();
                         }
                         
+                        if(!data[0].ips.includes(ip)) {
+                            data[0].likes = data.likes + 1;                    
+                            data[0].ips.push(ip);
+                            data[0].save();
+                        }
                         
+                        newStock.save();
+                        res.json({
+                          stockOne: {
+                            ticker: data[0].ticker, 
+                            price: data[0].price,
+                            rel_likes: data[0].likes - newStock.likes
+                          }, 
+                          stockTwo: {
+                            ticker: newStock.ticker,
+                            price: newStock.price,
+                            rel_likes: newStock.likes - data[0].likes
+                        }
+                        });
                       }
-                       
+                      
+                      // if both stocks are found in the database
                       if(data.length === 2) {
                         for(let i = 0; i < data.length; i++) {
                           if(!data[i].ips.includes(ip)) {
