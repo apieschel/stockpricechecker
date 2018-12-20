@@ -69,6 +69,8 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200, 'response status should be 200');
           assert.equal(res.type, 'application/json', 'check if the response is json');
+          assert.isDefined(res.body.stockOne, 'check if the first stock is defined');
+          assert.isDefined(res.body.stockTwo, 'check if the second stock is defined');
           assert.equal(res.body.stockOne.ticker, 'GOOG', 'check if the first stock name is returned'); 
           assert.equal(res.body.stockTwo.ticker, 'AAPL', 'check if the second stock name is returned'); 
           assert.equal(typeof res.body.stockOne.price, 'string', 'check for price in first stock');
@@ -86,6 +88,8 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200, 'response status should be 200');
           assert.equal(res.type, 'application/json', 'check if the response is json');
+          assert.isDefined(res.body.stockOne, 'check if the first stock is defined');
+          assert.isDefined(res.body.stockTwo, 'check if the second stock is defined');
           assert.equal(res.body.stockOne.ticker, 'GOOG', 'check if the first stock name is returned'); 
           assert.equal(res.body.stockTwo.ticker, 'AAPL', 'check if the second stock name is returned'); 
           assert.equal(typeof res.body.stockOne.price, 'string', 'check for price in first stock');
