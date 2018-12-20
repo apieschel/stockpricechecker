@@ -17,6 +17,8 @@ suite('Functional Tests', function() {
     
     suite('GET /api/stock-prices => stockData object', function() {
       
+      // Run tests individually. If all tests are run at once, then the allowed 5 API calls per minute 
+      // for the Alpha Vantage site (https://www.alphavantage.co/) will be exceeded, and the final test will fail.
       test('1 stock', function(done) {
        chai.request(server)
         .get('/api/stock-prices')
