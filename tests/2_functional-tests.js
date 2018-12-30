@@ -9,6 +9,7 @@
 var chaiHttp = require('chai-http');
 var chai = require('chai');
 var assert = chai.assert;
+const expect = chai.expect;
 var server = require('../server');
 
 chai.use(chaiHttp);
