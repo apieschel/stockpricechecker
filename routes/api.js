@@ -14,7 +14,7 @@ module.exports = function (app) {
         https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
         let stockData = '';
 
-        // A chunk of data has been recieved.
+        // A chunk of data has been received.
         resp.on('data', (chunk) => {
           stockData += chunk;
         });
@@ -90,7 +90,7 @@ module.exports = function (app) {
         let stockData = '';
         let dataset = [];
 
-        // A chunk of data has been recieved.
+        // A chunk of data has been received.
         resp.on('data', (chunk) => {
           stockData += chunk;
         });
@@ -106,12 +106,11 @@ module.exports = function (app) {
             https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock[1] + '&apikey=' + process.env.API_KEY, (resp) => {
               let stockData = '';
 
-              // A chunk of data has been recieved.
+              // Nested callback
               resp.on('data', (chunk) => {
                 stockData += chunk;
               });
 
-              // The whole response has been received. Print out the result.
               resp.on('end', () => {
                 dataset.push(JSON.parse(stockData));
                 
