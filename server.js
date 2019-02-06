@@ -1,15 +1,15 @@
 'use strict';
 
-const express     = require('express');
-const bodyParser  = require('body-parser');
-const expect      = require('chai').expect;
-const cors        = require('cors');
+const express           = require('express');
+const bodyParser        = require('body-parser');
+const expect            = require('chai').expect;
+const cors              = require('cors');
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 const helmet            = require('helmet');
-const mongoose = require('mongoose');
-const app = express();
+const mongoose          = require('mongoose');
+const app               = express();
 
 app.use(helmet({
   frameguard: {
@@ -25,9 +25,7 @@ app.use(helmet({
  }));
   
 app.use('/public', express.static(process.cwd() + '/public'));
-
 app.use(cors({origin: '*'})); //For FCC testing purposes only
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -73,8 +71,6 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true}, (err, db) => {
           }
         });
       
-        module.exports = app; //for testing
-      
+        module.exports = app; //for testing     
       }
-
 });
