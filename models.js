@@ -1,13 +1,13 @@
-let mongoose = require("mongoose");
-let Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-let stockSchema = new Schema({
+const stockSchema = new Schema({
 	ticker: String,
 	price: String,
   likes: Number,
   ips: [String]
 });
 
-let Stock = mongoose.model('Stock', stockSchema);
+const Stock = mongoose.model('Stock', stockSchema);
 
 exports.stockModel = Stock;
