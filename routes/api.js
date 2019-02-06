@@ -103,10 +103,11 @@ module.exports = function (app) {
              Object.keys(dataset[0]['Global Quote']).length !== 0) {            
             
             let name = dataset[0]["Global Quote"]["01. symbol"];
+            
+            // Nested callback to process data from the second stock
             https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock[1] + '&apikey=' + process.env.API_KEY, (resp) => {
               let stockData = '';
-
-              // Nested callback
+              
               resp.on('data', (chunk) => {
                 stockData += chunk;
               });
