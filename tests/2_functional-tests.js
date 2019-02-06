@@ -1,21 +1,12 @@
-/*
-*
-*
-*       FILL IN EACH FUNCTIONAL TEST BELOW COMPLETELY
-*       -----[Keep the tests in the same order!]-----
-*       (if additional are added, keep them at the very end!)
-*/
-
-var chaiHttp = require('chai-http');
-var chai = require('chai');
-var assert = chai.assert;
+const chaiHttp = require('chai-http');
+const chai = require('chai');
+const assert = chai.assert;
 const expect = chai.expect;
-var server = require('../server');
+const server = require('../server');
 
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
-    
     suite('GET /api/stock-prices => stockData object', function() {
       
       // Run tests individually. If all tests are run at once, then the allowed 5 API calls per minute 
@@ -32,8 +23,7 @@ suite('Functional Tests', function() {
           done();
         });
       });
-      
-      
+         
       test('1 stock with like', function(done) {
         chai.request(server)
         .get('/api/stock-prices')
@@ -48,7 +38,6 @@ suite('Functional Tests', function() {
           done();
         });  
       });
-      
       
       test('1 stock with like again (ensure likes arent double counted)', function(done) {
         chai.request(server)
