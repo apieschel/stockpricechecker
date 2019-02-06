@@ -11,16 +11,14 @@
   <body>
     <header>
       <h1>Nasdaq Stock Price Checker</h1>
-      <div>Note: the Alpha Vantage stock API is used for this project: <a href="https://www.alphavantage.co/">https://www.alphavantage.co/</a></div>
     </header>
     <div id="userstories">
       <ol>
         <li>Using the form below, you can <b>GET</b> <code>/api/stock-prices</code> with form data containing a Nasdaq stock ticker.</li>
         <li>The returned stock object will contain the stock name (a string, also known as the "ticker"), the price (a decimal in string format), and the number of likes (an integer).</li>
         <li>If the <i>like</i> field is passed as <b>true</b>(boolean) via the checkbox, then the user's like will be added to the stock object. Only one like is permitted per IP address.</li>
-        <li>If I pass along 2 stocks, the return object will be an array with both stock's info but instead of <i>likes</i>, it will display <i>rel_likes</i>(the difference between the likes on both) on both.</li>
-        <li>A good way to receive current price is the following external API(replacing 'GOOG' with your stock): <code>https://finance.google.com/finance/info?q=NASDAQ%3aGOOG</code></li>
-        <li>All 5 functional tests are complete and passing.</li>
+        <li>If two stocks are requested, the returned object will be an array with both stocks' info, but instead of likes, they will contain <i>rel_likes</i> (the difference between the likes on both).</li>
+        <li>The Alpha Vantage stock API is used for this project: <a href="https://www.alphavantage.co/">https://www.alphavantage.co/</a>.</li>
       </ol>
       <h3>Example usage:</h3>
       <code>/api/stock-prices?stock=goog</code><br>
