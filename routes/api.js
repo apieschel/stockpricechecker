@@ -9,7 +9,7 @@ const Stock = require("../models.js").stockModel;
 module.exports = function (app) {
 
   app.route('/api/stock-prices')
-    .get(function (req, res){
+    .get(function (req, res) {
     
         https.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + req.query.stock + '&apikey=' + process.env.API_KEY, (resp) => {
         let stockData = '';
@@ -19,28 +19,33 @@ module.exports = function (app) {
           stockData += chunk;
         });
 
-        // The whole response has been received. Print out the result.
+        // The whole response has been received.
         resp.on('end', () => {
             let dataset = JSON.parse(stockData);
 
-            if(dataset['Global Quote'] != null &&
-               Object.keys(dataset['Global Quote']).length !== 0) { 
+            if(dataset['Global Quote'] != null && Object.keys(dataset['Global Quote']).length !== 0) { 
               let name = dataset["Global Quote"]["01. symbol"];
               let price = dataset["Global Quote"]["05. price"];
+              
+              // if the "Like" box is checked
               if(req.query.like) {
                 Stock.findOne({ticker: name}, function(err, data) {
+                  // check to see if the stock is already in the database
                   if(data !== null) {
                     if(err) throw err;
 
                     let ip = req.headers['x-forwarded-for'];
+                    
                     if(ip) {
                       ip = req.headers['x-forwarded-for'].split(',').shift();
                     } else {
                       ip = req.connection.remoteAddress;
                     }
-
+                    
+                    // grab the array of ip addresses
                     let ipArr = data.ips;
-
+                    
+                    // check to see if the user's ip is already in the array
                     if(ipArr.includes(ip)) {
                       res.json("You have already liked this stock!");
                     } else {
@@ -49,7 +54,6 @@ module.exports = function (app) {
                       data.save();
                       res.json("You added this stock to your likes!");
                     }       
-
                   } else {			
                       if(err) throw err;
 
@@ -76,10 +80,8 @@ module.exports = function (app) {
           }
         });
       }).on("error", (err) => {
-        console.log("Error: " + err.message);
         res.json("Error: " + err.message);
       });
-    
     });
   
     app.get("/api/stock-prices/compare", function(req, res) {
@@ -93,7 +95,7 @@ module.exports = function (app) {
           stockData += chunk;
         });
 
-        // The whole response has been received. Print out the result.
+        // The whole response has been received.
         resp.on('end', () => {
           dataset.push(JSON.parse(stockData));
 
@@ -113,8 +115,7 @@ module.exports = function (app) {
               resp.on('end', () => {
                 dataset.push(JSON.parse(stockData));
                 
-                if(dataset[1]['Global Quote'] != null &&
-                   Object.keys(dataset[1]['Global Quote']).length !== 0) { 
+                if(dataset[1]['Global Quote'] != null && Object.keys(dataset[1]['Global Quote']).length !== 0) { 
                   let name = dataset[1]["Global Quote"]["01. symbol"];
                   if(req.query.like) {
                     
@@ -285,7 +286,6 @@ module.exports = function (app) {
                 }
               });
             }).on("error", (err) => {
-              console.log("Error: " + err.message);
               res.json("Error: " + err.message);
             });
             
@@ -294,7 +294,6 @@ module.exports = function (app) {
           }
         });
       }).on("error", (err) => {
-        console.log("Error: " + err.message);
         res.json("Error: " + err.message);
       });     
     });
