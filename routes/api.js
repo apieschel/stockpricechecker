@@ -96,7 +96,6 @@ module.exports = function (app) {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
           dataset.push(JSON.parse(stockData));
-          console.log(dataset);
 
           if(dataset[0]['Global Quote'] != null &&
              Object.keys(dataset[0]['Global Quote']).length !== 0) {            
@@ -113,7 +112,6 @@ module.exports = function (app) {
               // The whole response has been received. Print out the result.
               resp.on('end', () => {
                 dataset.push(JSON.parse(stockData));
-                console.log(dataset);
                 
                 if(dataset[1]['Global Quote'] != null &&
                    Object.keys(dataset[1]['Global Quote']).length !== 0) { 
