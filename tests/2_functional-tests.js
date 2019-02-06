@@ -9,8 +9,9 @@ chai.use(chaiHttp);
 suite('Functional Tests', function() {
     suite('GET /api/stock-prices => stockData object', function() {
       
-      // Run tests individually. If all tests are run at once, then the allowed 5 API calls per minute 
-      // for the Alpha Vantage site (https://www.alphavantage.co/) will be exceeded, and the final test will fail.
+      // Run 1-stock and 2-stock tests separately. If all tests are run at once, then the allowed 5 API calls per minute 
+      // for the Alpha Vantage site (https://www.alphavantage.co/) will be exceeded, and some tests will fail.
+  
       test('1 stock', function(done) {
        chai.request(server)
         .get('/api/stock-prices')
@@ -23,7 +24,8 @@ suite('Functional Tests', function() {
           done();
         });
       });
-         
+      
+      // You might need to clear the database for this Test to pass
       test('1 stock with like', function(done) {
         chai.request(server)
         .get('/api/stock-prices')
@@ -51,7 +53,7 @@ suite('Functional Tests', function() {
         });
       });
       
-      
+      /* Uncomment when you're ready to run the 2-stock tests
       test('2 stocks', function(done) {
         chai.request(server)
         .get('/api/stock-prices/compare')
@@ -88,8 +90,6 @@ suite('Functional Tests', function() {
           assert.equal(typeof res.body.stockTwo.rel_likes, 'number', 'check for number of relative likes in second stock');
           done();
         });
-      });
-      
+      });*/ 
     });
-
 });
