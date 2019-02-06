@@ -1,0 +1,29 @@
+body {
+  background: lightyellow;
+  font-family: Roboto;
+  font-size: 18px;
+  padding: 1% 5%;
+}
+
+button {
+  background: darkcyan;
+  border: 1px solid darkcyan;
+  border-radius: 2px; 
+  color: white;
+  cursor: pointer;
+  font-size: 18px; 
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 5px 20px;
+}
+
+button:hover {
+  background-color: blueviolet;
+  border-color: blueviolet;
+  transition: 1s ease all;
+}
+
+input[type="text"] {
+  padding: 5px;
+  width: 250px;
+}

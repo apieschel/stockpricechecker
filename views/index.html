@@ -2,8 +2,7 @@
 <html>
   <head>
     <title>Stock Search</title>
-    <meta name="description" content="A cool thing made with HyperDev">
-    <link id="favicon" rel="icon" href="#" type="image/x-icon">
+    <meta name="description" content="A stock price comparison project made with Node and Express">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,15 +10,11 @@
   </head>
   <body>
     <header>
-      <h1>
-        ISQA_5 - Nasdaq Stock Price Checker
-      </h1>
+      <h1>Nasdaq Stock Price Checker</h1>
     </header>
     <div id="userstories">
-      <h3>User Stories</h3>
       <ol>
-        <li>Set the content security policies to only allow loading of scripts and css from your server.</li>
-        <li>I can <b>GET</b> <code>/api/stock-prices</code> with form data containing a Nasdaq <i>stock</i> ticker and recieve back an object <i>stockData</i>.</li>
+        <li>Using the form below, you can <b>GET</b> <code>/api/stock-prices</code> with form data containing a Nasdaq stock ticker.</li>
         <li>In <i>stockData</i>, I can see the <i>stock</i>(string, the ticker), <i>price</i>(decimal in string format), and <i>likes</i>(int).</li>
         <li>I can also pass along field <i>like</i> as <b>true</b>(boolean) to have my like added to the stock(s). Only 1 like per ip should be accepted.</li>
         <li>If I pass along 2 stocks, the return object will be an array with both stock's info but instead of <i>likes</i>, it will display <i>rel_likes</i>(the difference between the likes on both) on both.</li>
@@ -54,12 +49,8 @@
       <code id="jsonResult"></code>
     </div>
     <hr>
-    <!-- Your web-app is https, so your scripts need to be too -->
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
-            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
-            crossorigin="anonymous"></script>
     
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
     <script src="./public/forms.js"></script>
-    
   </body>
 </html>
