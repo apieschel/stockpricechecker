@@ -5,6 +5,12 @@ body {
   padding: 1% 5%;
 }
 
+body .glitchButton {
+  position: fixed;
+  right: 20px; 
+  top: 20px;
+}
+
 button {
   background: darkcyan;
   border: 1px solid darkcyan;
@@ -26,10 +32,4 @@ button:hover {
 input[type="text"] {
   padding: 5px;
   width: 250px;
-}
-
-.glitchButton {
-  position: fixed;
-  right: 20px; 
-  top: 20px;
 }

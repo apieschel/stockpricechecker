@@ -11,15 +11,18 @@ const helmet            = require('helmet');
 const mongoose          = require('mongoose');
 const app               = express();
 
+// security
 app.use(helmet({
   frameguard: {
      action: 'deny'
   },
+  noCache: true,
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://code.jquery.com/jquery-2.2.1.min.js", "https://button.glitch.me"]
+      defaultSrc: ["'self'", "https://api.glitch.com"],
+      styleSrc: ["'self'", "https://button.glitch.me"],
+      scriptSrc: ["'self'", "https://code.jquery.com", "https://button.glitch.me", "https://api.glitch.com"],
+      imgSrc: ["'self'", "https://hyperdev.com", "https://glitch.com", "https://cdn.glitch.com", "https://s3.amazonaws.com"]
     }
    }
  }));
