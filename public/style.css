@@ -27,3 +27,9 @@ input[type="text"] {
   padding: 5px;
   width: 250px;
 }
+
+.glitchButton {
+  position: fixed;
+  right: 20px; 
+  top: 20px;
+}
